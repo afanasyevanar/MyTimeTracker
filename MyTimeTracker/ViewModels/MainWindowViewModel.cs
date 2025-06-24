@@ -10,7 +10,6 @@ namespace MyTimeTracker.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     private readonly DispatcherTimer _timer;
-    public ObservableCollection<TrackedApp> TrackedApps { get; } = new();
 
     public MainWindowViewModel()
     {
@@ -22,14 +21,13 @@ public class MainWindowViewModel : ViewModelBase
         _timer.Start();
     }
 
+    public ObservableCollection<TrackedApp> TrackedApps { get; } = new();
+
     private void Timer_Tick(object? sender, EventArgs e)
     {
         var (processName, _) = ActiveWindowTracker.GetActiveWindowInfo();
 
-        if (string.IsNullOrEmpty(processName) || processName == "Unknown")
-        {
-            return;
-        }
+        if (string.IsNullOrEmpty(processName) || processName == "Unknown") return;
 
         var trackedApp = TrackedApps.FirstOrDefault(a => a.AppName == processName);
 
@@ -40,7 +38,5 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         trackedApp.ActiveTime += TimeSpan.FromSeconds(1);
-        
-        Console.WriteLine(trackedApp.AppName + " - " + trackedApp.ActiveTime);
     }
 }
