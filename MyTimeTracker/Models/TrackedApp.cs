@@ -7,11 +7,13 @@ namespace MyTimeTracker.Models;
 public class TrackedApp : ViewModelBase
 {
     private TimeSpan _activeTime;
+    private bool _workApplication;
 
     public TrackedApp(string appName)
     {
         AppName = appName;
         ActiveTime = TimeSpan.Zero;
+        WorkApplication = false;
     }
 
     public string AppName { get; }
@@ -27,4 +29,10 @@ public class TrackedApp : ViewModelBase
     }
 
     public string FormattedTime => $"{(int)ActiveTime.TotalHours:D2}:{ActiveTime.Minutes:D2}:{ActiveTime.Seconds:D2}";
+
+    public bool WorkApplication
+    {
+        get => _workApplication;
+        set => this.RaiseAndSetIfChanged(ref _workApplication, value);
+    }
 }

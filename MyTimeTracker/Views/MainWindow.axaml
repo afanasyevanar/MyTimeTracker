@@ -16,13 +16,21 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <DataGrid ItemsSource="{Binding TrackedApps}"
-              IsReadOnly="True"
-              AutoGenerateColumns="False">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Application" Binding="{Binding AppName}" Width="*" />
-            <DataGridTextColumn Header="Active Time" Binding="{Binding FormattedTime}" Width="2*" />
-        </DataGrid.Columns>
-    </DataGrid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Настройки">
+                <MenuItem Header="Настройки приложений" Command="{Binding OpenAppSettingsCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <DataGrid ItemsSource="{Binding TrackedApps}"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Application" Binding="{Binding AppName}" Width="*" />
+                <DataGridTextColumn Header="Active Time" Binding="{Binding FormattedTime}" Width="2*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 
 </Window>

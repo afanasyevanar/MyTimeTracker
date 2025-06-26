@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MyTimeTracker.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+        x:Class="MyTimeTracker.Views.AppSettingsWindow"
+        x:DataType="vm:AppSettingsViewModel"
+        Icon="/Assets/hourglass.ico"
+        Title="Настройки приложений"
+        Width="400" Height="500"
+        WindowStartupLocation="CenterOwner">
+
+    <Design.DataContext>
+        <vm:AppSettingsViewModel />
+    </Design.DataContext>
+
+    <DockPanel Margin="10">
+        <!-- Кнопки внизу -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Сохранить" 
+                    Command="{Binding SaveCommand}" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
+                    Classes="accent" />
+            <Button Content="Отмена" 
+                    Command="{Binding CancelCommand}" 
+                    Width="80" />
+        </StackPanel>
+
+        <!-- Заголовок -->
+        <TextBlock DockPanel.Dock="Top" 
+                   Text="Настройка рабочих приложений" 
+                   FontSize="16" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,15" />
+
+        <!-- Список приложений -->
+        <DataGrid ItemsSource="{Binding AppSettings}"
+                  AutoGenerateColumns="False"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  IsReadOnly="False"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Приложение" 
+                                    Binding="{Binding AppName}" 
+                                    Width="*" 
+                                    IsReadOnly="True" />
+                <DataGridCheckBoxColumn Header="Рабочее приложение" 
+                                        Binding="{Binding WorkApplication}" 
+                                        Width="150" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
+
