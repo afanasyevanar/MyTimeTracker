@@ -24,11 +24,13 @@ public class MainWindowViewModel : ViewModelBase
         _timer.Start();
         
         OpenAppSettingsCommand = ReactiveCommand.Create(OpenAppSettings);
+        OpenStatisticsCommand = ReactiveCommand.Create(OpenStatistics);
     }
 
     public ObservableCollection<TrackedApp> TrackedApps { get; } = new();
     
     public ReactiveCommand<Unit, Unit> OpenAppSettingsCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenStatisticsCommand { get; }
 
     private void Timer_Tick(object? sender, EventArgs e)
     {
@@ -64,6 +66,26 @@ public class MainWindowViewModel : ViewModelBase
         else
         {
             settingsWindow.Show();
+        }
+    }
+
+    private void OpenStatistics()
+    {
+        var statisticsViewModel = new StatisticsViewModel(TrackedApps);
+        var statisticsWindow = new StatisticsWindow(statisticsViewModel);
+        
+        // Найти главное окно для установки Owner
+        var mainWindow = Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop
+            ? desktop.MainWindow
+            : null;
+            
+        if (mainWindow != null)
+        {
+            statisticsWindow.ShowDialog(mainWindow);
+        }
+        else
+        {
+            statisticsWindow.Show();
         }
     }
 }

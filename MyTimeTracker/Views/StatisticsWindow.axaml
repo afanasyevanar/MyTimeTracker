@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MyTimeTracker.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+        x:Class="MyTimeTracker.Views.StatisticsWindow"
+        x:DataType="vm:StatisticsViewModel"
+        Title="Статистика использования приложений"
+        Width="500" Height="400"
+        CanResize="True">
+
+    <Design.DataContext>
+        <vm:StatisticsViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" 
+                   Text="Статистика использования приложений" 
+                   FontSize="18" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20"/>
+
+        <!-- Общее время -->
+        <Border Grid.Row="1" 
+                Background="#F0F0F0" 
+                CornerRadius="5" 
+                Padding="15" 
+                Margin="0,0,0,15">
+            <StackPanel>
+                <TextBlock Text="Общее время:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding FormattedTotalTime}" FontSize="16" Foreground="#2196F3"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Рабочее время -->
+        <Border Grid.Row="2" 
+                Background="#E8F5E8" 
+                CornerRadius="5" 
+                Padding="15" 
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Рабочие приложения:" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding FormattedTotalWorkTime}" FontSize="16" Foreground="#4CAF50"/>
+                    <TextBlock Text="{Binding WorkTimePercentage, StringFormat='{}{0:F1}%'}" FontSize="12" Foreground="#666"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Нерабочее время -->
+        <Border Grid.Row="3" 
+                Background="#FFF3E0" 
+                CornerRadius="5" 
+                Padding="15" 
+                Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Нерабочие приложения:" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding FormattedTotalNonWorkTime}" FontSize="16" Foreground="#FF9800"/>
+                    <TextBlock Text="{Binding NonWorkTimePercentage, StringFormat='{}{0:F1}%'}" FontSize="12" Foreground="#666"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Детальная статистика по приложениям -->
+        <ScrollViewer Grid.Row="4" Margin="0,0,0,15">
+            <StackPanel>
+                <TextBlock Text="Детальная статистика:" FontWeight="Bold" Margin="0,0,0,10"/>
+                
+                <!-- Рабочие приложения -->
+                <TextBlock Text="Рабочие приложения:" FontWeight="SemiBold" Foreground="#4CAF50" Margin="0,0,0,5"/>
+                <ItemsControl ItemsSource="{Binding TrackedApps}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2" IsVisible="{Binding WorkApplication}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding AppName}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding FormattedTime}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Нерабочие приложения -->
+                <TextBlock Text="Нерабочие приложения:" FontWeight="SemiBold" Foreground="#FF9800" Margin="0,15,0,5"/>
+                <ItemsControl ItemsSource="{Binding TrackedApps}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2" IsVisible="{Binding WorkApplication, Converter={x:Static BoolConverters.Not}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding AppName}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding FormattedTime}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Кнопка закрытия -->
+        <Button Grid.Row="5" 
+                Content="Закрыть" 
+                HorizontalAlignment="Center" 
+                Width="100"
+                Click="CloseButton_Click"/>
+    </Grid>
+
+</Window> 

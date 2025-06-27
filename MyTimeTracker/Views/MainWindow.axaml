@@ -18,8 +18,9 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Настройки">
+            <MenuItem Header="Меню">
                 <MenuItem Header="Настройки приложений" Command="{Binding OpenAppSettingsCommand}" />
+                <MenuItem Header="Статистика" Command="{Binding OpenStatisticsCommand}" />
             </MenuItem>
         </Menu>
 
