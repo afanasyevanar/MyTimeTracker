@@ -24,6 +24,17 @@
             </MenuItem>
         </Menu>
 
+        <Border DockPanel.Dock="Top" 
+                Background="#FFEBEE" 
+                CornerRadius="5" 
+                Padding="10" 
+                Margin="10,5,10,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Отвлеканий за сессию: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding DistractionsCount}" FontWeight="Bold" FontSize="16" Foreground="#E91E63" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
         <DataGrid ItemsSource="{Binding TrackedApps}"
                   IsReadOnly="True"
                   AutoGenerateColumns="False">

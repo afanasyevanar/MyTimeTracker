@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -68,7 +69,7 @@
                 Background="#FFF3E0" 
                 CornerRadius="5" 
                 Padding="15" 
-                Margin="0,0,0,15">
+                Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -82,8 +83,21 @@
             </Grid>
         </Border>
 
+        <!-- Количество отвлеканий -->
+        <Border Grid.Row="4" 
+                Background="#FFEBEE" 
+                CornerRadius="5" 
+                Padding="15" 
+                Margin="0,0,0,15">
+            <StackPanel>
+                <TextBlock Text="Количество отвлеканий:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding DistractionsCount}" FontSize="16" Foreground="#E91E63"/>
+                <TextBlock Text="(переходы из рабочих в нерабочие приложения)" FontSize="12" Foreground="#666"/>
+            </StackPanel>
+        </Border>
+
         <!-- Детальная статистика по приложениям -->
-        <ScrollViewer Grid.Row="4" Margin="0,0,0,15">
+        <ScrollViewer Grid.Row="5" Margin="0,0,0,15">
             <StackPanel>
                 <TextBlock Text="Детальная статистика:" FontWeight="Bold" Margin="0,0,0,10"/>
                 
@@ -124,7 +138,7 @@
         </ScrollViewer>
 
         <!-- Кнопка закрытия -->
-        <Button Grid.Row="5" 
+        <Button Grid.Row="6" 
                 Content="Закрыть" 
                 HorizontalAlignment="Center" 
                 Width="100"

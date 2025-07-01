@@ -13,6 +13,8 @@ namespace MyTimeTracker.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     private readonly DispatcherTimer _timer;
+    private string _lastActiveApp = string.Empty;
+    private int _distractionsCount = 0;
 
     public MainWindowViewModel()
     {
@@ -28,9 +30,16 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     public ObservableCollection<TrackedApp> TrackedApps { get; } = new();
+    public int DistractionsCount => _distractionsCount;
     
     public ReactiveCommand<Unit, Unit> OpenAppSettingsCommand { get; }
     public ReactiveCommand<Unit, Unit> OpenStatisticsCommand { get; }
+    
+    public void ResetDistractions()
+    {
+        _distractionsCount = 0;
+        this.RaisePropertyChanged(nameof(DistractionsCount));
+    }
 
     private void Timer_Tick(object? sender, EventArgs e)
     {
@@ -46,6 +55,18 @@ public class MainWindowViewModel : ViewModelBase
             TrackedApps.Add(trackedApp);
         }
 
+        // Distraction check
+        if (!string.IsNullOrEmpty(_lastActiveApp) && _lastActiveApp != processName)
+        {
+            var lastApp = TrackedApps.FirstOrDefault(a => a.AppName == _lastActiveApp);
+            if (lastApp is { WorkApplication: true } && !trackedApp.WorkApplication)
+            {
+                _distractionsCount++;
+                this.RaisePropertyChanged(nameof(DistractionsCount));
+            }
+        }
+
+        _lastActiveApp = processName;
         trackedApp.ActiveTime += TimeSpan.FromSeconds(1);
     }
     
@@ -53,8 +74,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         var settingsViewModel = new AppSettingsViewModel(TrackedApps);
         var settingsWindow = new AppSettingsWindow(settingsViewModel);
-        
-        // Найти главное окно для установки Owner
+
         var mainWindow = Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow
             : null;
@@ -71,7 +91,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void OpenStatistics()
     {
-        var statisticsViewModel = new StatisticsViewModel(TrackedApps);
+        var statisticsViewModel = new StatisticsViewModel(TrackedApps, _distractionsCount);
         var statisticsWindow = new StatisticsWindow(statisticsViewModel);
         
         // Найти главное окно для установки Owner

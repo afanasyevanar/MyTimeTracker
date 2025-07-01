@@ -6,13 +6,15 @@ namespace MyTimeTracker.ViewModels;
 
 public class StatisticsViewModel : ViewModelBase
 {
-    public StatisticsViewModel(ObservableCollection<Models.TrackedApp> trackedApps)
+    public StatisticsViewModel(ObservableCollection<Models.TrackedApp> trackedApps, int distractionsCount = 0)
     {
         TrackedApps = trackedApps;
+        DistractionsCount = distractionsCount;
         CalculateStatistics();
     }
 
     public ObservableCollection<Models.TrackedApp> TrackedApps { get; }
+    public int DistractionsCount { get; }
 
     public TimeSpan TotalWorkTime { get; private set; }
     public TimeSpan TotalNonWorkTime { get; private set; }
