@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -15,6 +16,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly DispatcherTimer _timer;
     private string _lastActiveApp = string.Empty;
     private int _distractionsCount = 0;
+    private readonly Dictionary<string, bool> _settings;
 
     public MainWindowViewModel()
     {
@@ -27,6 +29,7 @@ public class MainWindowViewModel : ViewModelBase
         
         OpenAppSettingsCommand = ReactiveCommand.Create(OpenAppSettings);
         OpenStatisticsCommand = ReactiveCommand.Create(OpenStatistics);
+        _settings = SettingsService.LoadSettings();
     }
 
     public ObservableCollection<TrackedApp> TrackedApps { get; } = new();
@@ -34,12 +37,6 @@ public class MainWindowViewModel : ViewModelBase
     
     public ReactiveCommand<Unit, Unit> OpenAppSettingsCommand { get; }
     public ReactiveCommand<Unit, Unit> OpenStatisticsCommand { get; }
-    
-    public void ResetDistractions()
-    {
-        _distractionsCount = 0;
-        this.RaisePropertyChanged(nameof(DistractionsCount));
-    }
 
     private void Timer_Tick(object? sender, EventArgs e)
     {
@@ -51,7 +48,10 @@ public class MainWindowViewModel : ViewModelBase
 
         if (trackedApp == null)
         {
-            trackedApp = new TrackedApp(processName);
+            trackedApp = new TrackedApp(processName)
+            {
+                WorkApplication = _settings.ContainsKey(processName) && _settings[processName]
+            };
             TrackedApps.Add(trackedApp);
         }
 

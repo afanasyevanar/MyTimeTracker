@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using MyTimeTracker.Models;
+using MyTimeTracker.Services;
 using ReactiveUI;
 
 namespace MyTimeTracker.ViewModels;
@@ -40,6 +41,7 @@ public class AppSettingsViewModel : ViewModelBase
             }
         }
         
+        SettingsService.SaveSettings(_sourceTrackedApps);
         CloseRequested?.Invoke();
     }
     
